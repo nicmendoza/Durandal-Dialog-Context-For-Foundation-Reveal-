@@ -10,35 +10,14 @@ dialog.addContext('reveal', {
 		 */
 		addHost: function(theDialog) {
 			var body = $('body');
-			var blockout = $('<div class="reveal-modal-bg"></div>')
-				.css({
-					'z-index': dialog.getNextZIndex(),
-					'display' : 'block'
-				})
-				.appendTo(body);
 
-			var host = $('<div class="reveal-modal"></div>')
+			var host = $('<div class="reveal-modal" data-reveal></div>')
 				.css({
 					'z-index': dialog.getNextZIndex()
 				})
 				.appendTo(body);
 
 			theDialog.host = host.get(0);
-			theDialog.blockout = blockout.get(0);
-
-
-			// escape key
-			$(window).on('keyup', function(e) {
-				if(e.keyCode === 27 && $(theDialog.host).find('.autoclose').length){
-					theDialog.close();
-				}
-			});
-
-			$('body').on('click', theDialog.blockout, function(e) {
-				if (e.target === theDialog.blockout && $(theDialog.host).find('.autoclose').length ) {
-					theDialog.close();
-				}
-			});
 
 		},
 		/**
@@ -47,13 +26,7 @@ dialog.addContext('reveal', {
 		 * @param {Dialog} theDialog The dialog model.
 		 */
 		removeHost: function(theDialog) {
-
-			Foundation.libs.reveal.close(theDialog.host);
-
-			setTimeout(function() {
-				ko.removeNode(theDialog.host);
-				ko.removeNode(theDialog.blockout);
-			}, this.removeDelay);
+			
 		},
 		attached: function(view) {
 			//To prevent flickering in IE8, we set visibility to hidden first, and later restore it

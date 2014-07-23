@@ -1,9 +1,7 @@
 Durandal-Dialog-Context-For-Foundation-Reveal-
 ==============================================
 
-A dialog context for Durandal that opens up a Foundation Reveal modal dialog.
-
-Add the optional class "autoclose" to your dialog view to close when the blockout is clicked or when the escape key is pressed
+A dialog context for Durandal that opens up a Foundation Reveal modal dialog. Use Foundation settings to control all aspects of the Reveal dialog as usual.
 
 Usage Example
 =============
