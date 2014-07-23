@@ -18,7 +18,7 @@ The above will work, assuming you are using Durandal, that your dialog is in the
 
 An example dialog view (hypothetically located at dialogs/myDialog.html):
 
-    <div class="autoclose">
+    <div>
     	<a class="close-reveal-modal">&#215;</a>
     	I am a modal dialog!
     </div>
