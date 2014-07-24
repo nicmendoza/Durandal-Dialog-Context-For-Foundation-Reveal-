@@ -26,7 +26,7 @@ dialog.addContext('reveal', {
 		 * @param {Dialog} theDialog The dialog model.
 		 */
 		removeHost: function(theDialog) {
-			
+			$(theDialog.host).foundation('reveal','close');
 		},
 		attached: function(view) {
 			//To prevent flickering in IE8, we set visibility to hidden first, and later restore it
