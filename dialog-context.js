@@ -1,4 +1,5 @@
 define(['plugins/dialog','jquery','foundation'], function(dialog,$,Foundation) {
+	var initialFoundationRevealSettings = {};
 
 // this is just a copy of the default dialog, made to work with foundation
 dialog.addContext('reveal', {
@@ -11,13 +12,25 @@ dialog.addContext('reveal', {
 		addHost: function(theDialog) {
 			var body = $('body');
 
-			var host = $('<div class="reveal-modal" data-reveal></div>')
+			var host = $('<div class="reveal-modal medium" data-reveal></div>')
 				.css({
 					'z-index': dialog.getNextZIndex()
 				})
 				.appendTo(body);
 
 			theDialog.host = host.get(0);
+
+			// This will probably create problems with nested modals
+			// or dialogs
+			$(document).on('close', '[data-reveal]', function removeHost(){
+				$(document).off('close', removeHost);
+
+				// This is to prevent the node from being removed before the
+				// animation completes
+				setTimeout(function(){
+					ko.removeNode(theDialog.host);
+				}, 500);
+			});
 
 		},
 		/**
@@ -27,8 +40,12 @@ dialog.addContext('reveal', {
 		 */
 		removeHost: function(theDialog) {
 			$(theDialog.host).foundation('reveal','close');
+
+			// Restore original Foundation reveal settings changed in compositionComplete
+			$.extend(Foundation.libs.reveal.settings, initialFoundationRevealSettings);
 		},
 		attached: function(view) {
+
 			//To prevent flickering in IE8, we set visibility to hidden first, and later restore it
 			//$(view).css("visibility", "hidden");
 		},
@@ -40,6 +57,17 @@ dialog.addContext('reveal', {
 		 * @param {object} context The composition context.
 		 */
 		compositionComplete: function(child, parent, context) {
+			var revealSettings = context.model.revealSettings;
+
+			// Modify Foundations reveal settings
+			if(revealSettings){
+				$.each(revealSettings, function(prop, value){
+					initialFoundationRevealSettings[prop] = Foundation.libs.reveal.settings[prop];
+				});
+
+				$.extend(Foundation.libs.reveal.settings, revealSettings);
+			}
+
 			$(parent).foundation('reveal', 'open');
 		}
 	});
